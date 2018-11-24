@@ -5,10 +5,6 @@ defmodule LocaWeb.PageController do
     render conn, "index.html"
   end
 
-  def game(conn, _params) do
-    render conn, "game.html", game_id: 0
-  end
-
   def start_game(conn, params) do
     {:ok, markers, _} = Plug.Conn.read_body(conn)
     game_id =
@@ -17,8 +13,9 @@ defmodule LocaWeb.PageController do
     json conn, %{ game_id: game_id }
   end
 
-  def check_position(conn, params) do
+  def check_position(conn, %{ "game_id" => game_id }) do
     {:ok, position, _} = Plug.Conn.read_body(conn)
+    json conn, %{ status: :further }
   end
 
   def join(conn, %{ "game_id" => game_id }) do
