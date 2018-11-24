@@ -12,30 +12,27 @@ defmodule Loca.GameManager do
   def join_game(game_id, name, position = %{"lng" => _lng, "lat" => _lat}),
     do: GenServer.call({:global, game_id}, {:join_game, name, position})
 
-  def check_position(game_id, position = %{"lng" => _lng, "lat" => _lat}),
-    do: GenServer.call({:global, game_id}, {:check_position, position})
+  def check_position(game_id, name, position = %{"lng" => _lng, "lat" => _lat}),
+    do: GenServer.call({:global, game_id}, {:check_position, name, position})
 
-  def init(list), do: {:ok, %{markers: list, player: %{}}}
+  def init(list), do: {:ok, %{markers: list, players: []}}
 
   def get_state(game_id), do: GenServer.call({:global, game_id}, :check_state)
 
-  def get_player_location(game_id), do: GenServer.call({:global, game_id}, :get_player_location)
+  def get_player_location(game_id, name), do: GenServer.call({:global, game_id}, {:get_player_location, name})
 
   def handle_call(:check_state, _from, state), do: {:reply, state, state}
 
   def handle_call({:join_game, name, position = %{"lng" => _lng, "lat" => _lat}}, _from, state) do
-    new_player =
-      state.player
-      |> Map.put(:name, name)
-      |> Map.put(:position, position)
+    new_player = %{"name" => name, "position" => position}
 
-    {:reply, :ok, %{state | player: new_player}}
+    {:reply, :ok, %{state | players: state.players ++ [new_player]}}
   end
 
-  def handle_call(:get_player_location, _from, state), do: {:reply, state.player.position, state}
+  def handle_call({:get_player_location, name}, _from, state), do: {:reply, find_player(state.players, name)["position"], state}
 
-  def handle_call({:check_position, position = %{"lng" => _lng, "lat" => _lat}}, _from, state) do
-    old_distance = calculate_distance(state.markers, state.player.position)
+  def handle_call({:check_position, name, position = %{"lng" => _lng, "lat" => _lat}}, _from, state) do
+    old_distance = calculate_distance(state.markers, find_player(state.players, name)["position"])
     new_distance = calculate_distance(state.markers, position)
 
     result =
@@ -46,25 +43,30 @@ defmodule Loca.GameManager do
         old_distance - new_distance == 0 -> :no_movement
       end
 
-    new_state = update_state(state, position, result)
+    new_state = update_state(state, position, name, result)
 
     cond do
-      length(new_state.markers) == 0 -> {:reply, %{"result" => :winner, "distance" => new_distance}, new_state}
-      true -> {:reply, %{"result" => result, "distance" => new_distance}, new_state}
+      length(new_state.markers) == 0 -> {:reply, %{"result" => {:winner, name}, "distance" => new_distance}, new_state}
+      true -> {:reply, %{"result" => {result, name}, "distance" => new_distance}, new_state}
     end
   end
 
-  defp update_state(state, position, :on_point),
-    do: %{state | markers: tl(state.markers), player: %{state.player | position: position}}
+  defp update_state(state, position, name, :on_point),
+    do: %{state | markers: tl(state.markers), players: update_players_list(state.players, name, position)}
 
-  defp update_state(state, _position, :no_movement), do: state
+  defp update_state(state, _position, _name, :no_movement), do: state
 
-  defp update_state(state, position, _result),
-    do: %{state | player: %{state.player | position: position}}
+  defp update_state(state, position, name, _result),
+    do: %{state | players: update_players_list(state.players, name, position)}
+
+    defp update_players_list(players, name, position) do
+        player_to_change = find_player(players, name)
+        (players -- [player_to_change]) ++ [%{player_to_change | "position" => position}]
+    end
 
   defp calculate_distance([%{"lng" => marker_lng, "lat" => marker_lat} | _rest], %{
-         "lng" => player_lng,
-         "lat" => player_lat
+         "lat" => player_lat,
+         "lng" => player_lng
        }),
        do: distance_in_meters(marker_lat, marker_lng, player_lat, player_lng)
 
@@ -84,4 +86,6 @@ defmodule Loca.GameManager do
   end
 
   defp degreesToRadians(degrees), do: degrees * :math.pi / 180
+
+  def find_player(players, name), do: Enum.find(players, fn(player) -> match?(%{"name" => name, "position" => _}, player) end)
 end
