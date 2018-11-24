@@ -40,7 +40,7 @@ defmodule Loca.GameManager do
 
     result =
       cond do
-        new_distance == 0 -> :on_point
+        trunc(new_distance) == 0 -> :on_point
         old_distance - new_distance > 0 -> :closer
         old_distance - new_distance < 0 -> :further
         old_distance - new_distance == 0 -> :no_movement
@@ -66,7 +66,22 @@ defmodule Loca.GameManager do
          "lng" => player_lng,
          "lat" => player_lat
        }),
-       do: :math.sqrt(square(marker_lat - player_lat) + square(marker_lng - player_lng))
+       do: distance_in_meters(marker_lat, marker_lng, player_lat, player_lng)
 
   defp square(x), do: x * x
+
+
+  defp distance_in_meters(lat1, lon1, lat2, lon2) do
+      earthRadiusMeters = 6_371_000
+
+      dLat = degreesToRadians(lat2-lat1)
+      dLon = degreesToRadians(lon2-lon1)
+
+      a = square(:math.sin(dLat/2)) + (square(:math.sin(dLon/2)) * :math.cos(degreesToRadians(lat1)) * :math.cos(degreesToRadians(lat2)))
+
+      c = 2 * :math.atan2(:math.sqrt(a), :math.sqrt(1-a))
+      earthRadiusMeters * c
+  end
+
+  defp degreesToRadians(degrees), do: degrees * :math.pi / 180
 end
