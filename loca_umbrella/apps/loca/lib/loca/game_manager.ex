@@ -11,11 +11,11 @@ defmodule Loca.GameManager do
         game_id
     end
 
-    def join_game(game_id, name, position = %{lng: _lng, lat: _lat}) do
+    def join_game(game_id, name, position = %{"lng" => _lng, "lat" => _lat}) do
         GenServer.call({:global, game_id}, {:join_game, name, position})
     end
 
-    def check_position(game_id, position = %{lng: _lng, lat: _lat}) do
+    def check_position(game_id, position = %{"lng" => _lng, "lat" => _lat}) do
         GenServer.call({:global, game_id}, {:check_position, position})
     end
 
@@ -31,7 +31,7 @@ defmodule Loca.GameManager do
         {:reply, state, state}
     end
 
-    def handle_call({:join_game, name, position = %{lng: _lng, lat: _lat}}, _from, state) do
+    def handle_call({:join_game, name, position = %{"lng" => _lng, "lat" => _lat}}, _from, state) do
         new_player = 
         state.player
         |> Map.put(:name, name)
@@ -40,7 +40,7 @@ defmodule Loca.GameManager do
         {:reply, :ok, %{state | player: new_player}}
     end
 
-    def handle_call({:check_position, position = %{lng: _lng, lat: _lat}}, _from, state) do
+    def handle_call({:check_position, position = %{"lng" => _lng, "lat" => _lat}}, _from, state) do
         old_distance = calculate_distance(state.markers, state.player.position)
         new_distance = calculate_distance(state.markers, position)
 
@@ -68,7 +68,7 @@ defmodule Loca.GameManager do
         %{state | player: %{state.player | position: position}}
     end
 
-    defp calculate_distance([%{lng: marker_lng, lat: marker_lat} | _rest], %{lng: player_lng, lat: player_lat}) do
+    defp calculate_distance([%{"lng" => marker_lng, "lat" => marker_lat} | _rest], %{"lng" => player_lng, "lat" => player_lat}) do
         :math.sqrt(square(marker_lat - player_lat) + square(marker_lng - player_lng))
     end
 
