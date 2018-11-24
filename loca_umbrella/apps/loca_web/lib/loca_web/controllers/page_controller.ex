@@ -21,6 +21,7 @@ defmodule LocaWeb.PageController do
   end
 
   def join(conn, %{ "game_id" => game_id }) do
+    Loca.GameManager.join_game(game_id, "Ziom", %{"lat" => 10, "lng" => 10})
     render conn, "game.html", game_id: game_id
   end
 
