@@ -40,7 +40,7 @@ defmodule Loca.GameManager do
 
     result =
       cond do
-        trunc(new_distance) == 0 -> :on_point
+        trunc(new_distance / 10) == 0 -> :on_point
         old_distance - new_distance > 0 -> :closer
         old_distance - new_distance < 0 -> :further
         old_distance - new_distance == 0 -> :no_movement
