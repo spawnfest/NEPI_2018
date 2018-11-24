@@ -44,7 +44,7 @@ defmodule LocaWeb.Mixfile do
       {:gettext, "~> 0.11"},
       {:loca, in_umbrella: true},
       {:cowboy, "~> 1.0"},
-      {:plug_cowboy, "~> 1.0"}
+      {:plug_cowboy, "~> 1.0"},
     ]
   end
 

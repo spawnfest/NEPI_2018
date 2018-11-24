@@ -40,12 +40,7 @@
       });
       map.panTo(position);
 
-      // first marker
-
       markers.push(marker);
-      // lat: position.lat(),
-      // lng: position.lng(),
-      console.log(markers);
     }
 
     startButton.addEventListener('click', (e) => {
@@ -56,8 +51,12 @@
         }
       });
 
-    
-
+      fetch('/start_game', {
+        method: 'POST',
+        body: JSON.stringify(markerObjects)
+      })
+      .then(response => response.json())
+      .then(console.log);
     });
 
   </script>

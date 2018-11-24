@@ -5,7 +5,6 @@ defmodule LocaWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
-    plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
 
@@ -17,6 +16,7 @@ defmodule LocaWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    post "/start_game", PageController, :start_game
   end
 
   # Other scopes may use custom stacks.
