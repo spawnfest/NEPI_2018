@@ -59,7 +59,7 @@
       })
       .then(response => response.json())
       .then(data => {
-        alert(window.location.href + '/join' + data.game_id);
+        alert(window.location.href + 'join/' + data.game_id);
       });
     });
 
