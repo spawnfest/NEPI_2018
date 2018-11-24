@@ -16,7 +16,8 @@ defmodule LocaWeb.PageController do
   def check_position(conn, %{ "game_id" => game_id }) do
     {:ok, position, _} = Plug.Conn.read_body(conn)
     parsed_position = Poison.Parser.parse!(position)
-    result = Loca.GameManager.check_position(game_id, parsed_position)
+    result = Loca.GameManager.check_position(game_id, hd parsed_position)
+    IO.inspect result
     json conn, %{ status: result }
   end
 

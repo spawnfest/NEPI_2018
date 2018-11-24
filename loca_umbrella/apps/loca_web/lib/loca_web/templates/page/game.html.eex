@@ -1,9 +1,20 @@
-<div id="message"/>
+<div id="message">No data</div>
+<button id="check-position" type="button" class="start-button btn btn-primary">Check position</button>
 
 <script>
   var game_id = '<%= @game_id %>';
+  var checkButton = document.getElementById('check-position');
+  var messageBox = document.getElementById('message');
 
   setInterval(() => {
+    checkPosition();
+  }, 1000);
+
+  checkButton.addEventListener('click', (e) => {
+    checkPosition();
+  });
+
+  function checkPosition() {
     navigator.geolocation.getCurrentPosition(function(position) {
       console.log(position);
       fetch('/check_position/' + game_id, {
@@ -14,8 +25,8 @@
         }])
       })
       .then(response => response.json())
-      .then(console.log);
-    });
-  }, 1000);
+      .then(data => { messageBox.innerHTML = data.status; });
+    }, (err) => { console.log(err) })
+  }
 
 </script>
