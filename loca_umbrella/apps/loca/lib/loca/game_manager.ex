@@ -54,7 +54,10 @@ defmodule Loca.GameManager do
 
         new_state = update_state(state, position, result)
 
-        {:reply, result, new_state}
+        cond do
+            length(new_state.markers) == 0 -> {:reply, :winner, new_state}
+            true -> {:reply, result, new_state}
+        end
     end
 
     defp update_state(state, position, :on_point) do

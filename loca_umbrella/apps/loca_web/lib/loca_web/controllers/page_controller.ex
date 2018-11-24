@@ -7,8 +7,7 @@ defmodule LocaWeb.PageController do
 
   def start_game(conn, params) do
     {:ok, markers, _} = Plug.Conn.read_body(conn)
-    IO.inspect Poison.Parser.parse!(markers)
-    json conn, %{id: 123}
-
+    game_id = Loca.GameManager.start_game(markers)
+    send_resp(conn, 200, "body: #{game_id}")
   end
 end
