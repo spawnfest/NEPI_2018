@@ -7,6 +7,14 @@
     var map;
     var startButton = document.getElementById('start-game');
 
+    let channel = socket.channel("game:lobby", {})
+    channel.join()
+      .receive("ok", resp => { console.log("Joined successfully", resp) })
+      .receive("error", resp => { console.log("Unable to join", resp) });
+      
+    channel.on("player_moved", msg => console.log("Got message", msg) );
+
+
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -34.397, lng: 150.644},
@@ -62,14 +70,6 @@
         alert(window.location.href + 'join/' + data.game_id);
       });
     });
-
-
-    socket.connect()
-
-    let channel = socket.channel("game:lobby", {})
-    channel.join()
-      .receive("ok", resp => { console.log("Joined successfully", resp) })
-      .receive("error", resp => { console.log("Unable to join", resp) })
 
 
   </script>

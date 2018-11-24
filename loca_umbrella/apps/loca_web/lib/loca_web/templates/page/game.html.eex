@@ -6,6 +6,9 @@
   var checkButton = document.getElementById('check-position');
   var messageBox = document.getElementById('message');
 
+  let channel = socket.channel("game:lobby", {});
+  channel.join();
+
   setInterval(() => {
     checkPosition();
   }, 1000);
@@ -17,6 +20,7 @@
   function checkPosition() {
     navigator.geolocation.getCurrentPosition(function(position) {
       console.log(position);
+      broadcastPosition(position);
       fetch('/check_position/' + game_id, {
         method: 'POST',
         body: JSON.stringify([{
@@ -48,6 +52,10 @@
         break;
       default:
     }
+  }
+
+  function broadcastPosition(position) {
+    channel.push("moved", position, 10000);
   }
 
 </script>
