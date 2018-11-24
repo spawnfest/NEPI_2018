@@ -46,8 +46,8 @@ defmodule Loca.GameManager do
     new_state = update_state(state, position, name, result)
 
     cond do
-      length(new_state.markers) == 0 -> {:reply, %{"result" => {:winner, name}, "distance" => new_distance}, new_state}
-      true -> {:reply, %{"result" => {result, name}, "distance" => new_distance}, new_state}
+      length(new_state.markers) == 0 -> {:reply, %{"result" => %{"action" => :winner, "player" => name}, "distance" => new_distance}, new_state}
+      true -> {:reply, %{"result" => %{"action" => result, "player" => name}, "distance" => new_distance}, new_state}
     end
   end
 

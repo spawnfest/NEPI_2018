@@ -16,8 +16,9 @@ defmodule LocaWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    get "/join/:game_id", PageController, :join
-    post "/check_position/:game_id", PageController, :check_position
+    get "/join/:game_id", PageController, :pre_join
+    get "/join/:game_id/:name", PageController, :join
+    post "/check_position/:game_id/:name", PageController, :check_position
     post "/start_game", PageController, :start_game
   end
 

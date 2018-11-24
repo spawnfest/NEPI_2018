@@ -3,6 +3,7 @@
 
 <script>
   var game_id = '<%= @game_id %>';
+  var user_name = '<%= @name %>';
   //var checkButton = document.getElementById('check-position');
   var messageBox = document.getElementById('message');
 
@@ -23,7 +24,7 @@
     navigator.geolocation.getCurrentPosition(function(position) {
       console.log(position);
       broadcastPosition({lat: position.coords.latitude, lng: position.coords.longitude});
-      fetch('/check_position/' + game_id, {
+      fetch('/check_position/' + game_id + '/' + user_name, {
         method: 'POST',
         body: JSON.stringify([{
           lat: position.coords.latitude,
@@ -32,7 +33,8 @@
       })
       .then(response => response.json())
       .then(data => {
-        renderStatus(data.status.result);
+        console.log(data)
+        renderStatus(data.status.result.action);
       });
     }, (err) => { console.log(err) })
   }
@@ -49,8 +51,11 @@
       case 'no_movement':
         document.body.style.backgroundColor = 'gray';
         break;
-      case 'no_movement':
+      case 'on_point':
         document.body.style.backgroundColor = 'yellow';
+        break;
+      case 'winner':
+        document.body.style.backgroundColor = 'pink';
         break;
       default:
     }
