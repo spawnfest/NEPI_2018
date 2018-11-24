@@ -25,8 +25,29 @@
         }])
       })
       .then(response => response.json())
-      .then(data => { messageBox.innerHTML = data.status; });
+      .then(data => {
+        renderStatus(data.status);
+      });
     }, (err) => { console.log(err) })
+  }
+
+  function renderStatus(status) {
+    messageBox.innerHTML = status;
+    switch (status) {
+      case 'further':
+        document.body.style.backgroundColor = 'red';
+        break;
+      case 'closer':
+        document.body.style.backgroundColor = 'green';
+        break;
+      case 'no_movement':
+        document.body.style.backgroundColor = 'gray';
+        break;
+      case 'no_movement':
+        document.body.style.backgroundColor = 'yellow';
+        break;
+      default:
+    }
   }
 
 </script>
