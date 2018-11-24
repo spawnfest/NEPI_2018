@@ -8,4 +8,5 @@ You can find app deployed [here](http://blooming-dusk-12946.herokuapp.com/)
 You can read more about code in specific projects README's
 
 _Loca_ has all the backend code
+
 _LocaWeb_ has all the frontend code
