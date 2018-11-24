@@ -36,7 +36,7 @@ defmodule LocaWeb.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_loca_web_key",
-    signing_salt: "Py/scSOr"
+    signing_salt: "SbcFNhGI"
 
   plug LocaWeb.Router
 

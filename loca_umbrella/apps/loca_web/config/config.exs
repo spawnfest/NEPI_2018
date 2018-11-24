@@ -7,13 +7,12 @@ use Mix.Config
 
 # General application configuration
 config :loca_web,
-  namespace: LocaWeb,
-  ecto_repos: [Loca.Repo]
+  namespace: LocaWeb
 
 # Configures the endpoint
 config :loca_web, LocaWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "DRrVrD3f6k0RDDGzVB2BaGWQdWkxYIf1zHuhrinaKOwFG9yR0viBxlvraw9WT2UR",
+  secret_key_base: "cJ4fayWjyZbICjJO/QblhJmRA6IayE7tzxTgv2SqOUuhO3n4zc97pQOFL0zhYzDP",
   render_errors: [view: LocaWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: LocaWeb.PubSub,
            adapter: Phoenix.PubSub.PG2]

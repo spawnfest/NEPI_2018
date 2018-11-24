@@ -13,7 +13,7 @@ defmodule Loca.Application do
     import Supervisor.Spec, warn: false
 
     Supervisor.start_link([
-      supervisor(Loca.Repo, []),
+      
     ], strategy: :one_for_one, name: Loca.Supervisor)
   end
 end
