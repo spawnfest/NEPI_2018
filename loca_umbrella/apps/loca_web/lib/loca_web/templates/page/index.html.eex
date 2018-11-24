@@ -1,5 +1,6 @@
   <div id="map"></div>
   <button id="start-game" style="position:fixed; top:10px; left: 50%" type="button" class="start-button btn btn-primary" disabled>Choose markers</button>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUhtGqgaU9lmQtmGUN9O2fRClnSO0pe7s&callback=initMap" async defer></script>
   <script>
     var markers = [];
     var map;

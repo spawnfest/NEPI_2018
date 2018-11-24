@@ -39,6 +39,6 @@
       </div> <!-- /container -->
 
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUhtGqgaU9lmQtmGUN9O2fRClnSO0pe7s&callback=initMap" async defer></script>
+    
   </body>
 </html>
