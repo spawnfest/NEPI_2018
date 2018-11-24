@@ -17,25 +17,26 @@
 
       if (playerLocations[data.name]) {
           playerLocations[data.name].setMap(null);
+      } else {
+        data.color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
       }
       playerLocations[data.name] = new google.maps.Marker({
         map: map,
-        position: [{lat: () => -25.363, lng: () => 131.044}],
-        // {
-        //   lng: data.lng,
-        //   lat: data.lat,
-        // },
+        position: {
+          lng: data.lng,
+          lat: data.lat
+        },
         icon: {
             path: google.maps.SymbolPath.CIRCLE,
-            fillColor: '#00F',
+            fillColor: data.color,
             fillOpacity: 0.6,
-            strokeColor: '#00A',
+            strokeColor: data.color,
             strokeOpacity: 0.9,
             strokeWeight: 1,
             scale: 7
         }
       });
-      map.panTo(playerLocations[data.name]);
+      //map.panTo(playerLocations[data.name]);
     });
 
 
