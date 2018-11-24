@@ -6,20 +6,25 @@
     var markers = [];
     var map;
     var startButton = document.getElementById('start-game');
-    var playerLocation;
+    var playerLocations = [];
 
     let channel = socket.channel("game:lobby", {})
     channel.join()
       .receive("ok", resp => { console.log("Joined successfully", resp) })
       .receive("error", resp => { console.log("Unable to join", resp) });
 
-    channel.on("player_moved", position => {
-      if (playerLocation) {
-          playerLocation.setMap(null);
+    channel.on("player_moved", data => {
+
+      if (playerLocations[data.name]) {
+          playerLocations[data.name].setMap(null);
       }
-      playerLocation = new google.maps.Marker({
+      playerLocations[data.name] = new google.maps.Marker({
         map: map,
-        position: map.getCenter(),
+        position: [{lat: () => -25.363, lng: () => 131.044}],
+        // {
+        //   lng: data.lng,
+        //   lat: data.lat,
+        // },
         icon: {
             path: google.maps.SymbolPath.CIRCLE,
             fillColor: '#00F',
@@ -30,7 +35,7 @@
             scale: 7
         }
       });
-      map.panTo(position);
+      map.panTo(playerLocations[data.name]);
     });
 
 

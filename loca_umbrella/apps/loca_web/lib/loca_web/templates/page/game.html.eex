@@ -23,7 +23,7 @@
   function checkPosition() {
     navigator.geolocation.getCurrentPosition(function(position) {
       console.log(position);
-      broadcastPosition({lat: position.coords.latitude, lng: position.coords.longitude});
+      broadcastPosition({lat: position.coords.latitude, lng: position.coords.longitude, name: user_name});
       fetch('/check_position/' + game_id + '/' + user_name, {
         method: 'POST',
         body: JSON.stringify([{
