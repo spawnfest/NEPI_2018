@@ -6,13 +6,32 @@
     var markers = [];
     var map;
     var startButton = document.getElementById('start-game');
+    var playerLocation;
 
     let channel = socket.channel("game:lobby", {})
     channel.join()
       .receive("ok", resp => { console.log("Joined successfully", resp) })
       .receive("error", resp => { console.log("Unable to join", resp) });
-      
-    channel.on("player_moved", msg => console.log("Got message", msg) );
+
+    channel.on("player_moved", position => {
+      if (playerLocation) {
+          playerLocation.setMap(null);
+      }
+      playerLocation = new google.maps.Marker({
+        map: map,
+        position: map.getCenter(),
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: '#00F',
+            fillOpacity: 0.6,
+            strokeColor: '#00A',
+            strokeOpacity: 0.9,
+            strokeWeight: 1,
+            scale: 7
+        }
+      });
+      map.panTo(position);
+    });
 
 
     function initMap() {
