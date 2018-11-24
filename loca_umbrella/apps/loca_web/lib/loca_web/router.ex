@@ -17,6 +17,7 @@ defmodule LocaWeb.Router do
 
     get "/", PageController, :index
     get "/game", PageController, :game
+    get "/join/:game_id", PageController, :join
     post "/start_game", PageController, :start_game
   end
 
