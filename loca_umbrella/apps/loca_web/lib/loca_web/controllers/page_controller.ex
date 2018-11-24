@@ -15,16 +15,20 @@ defmodule LocaWeb.PageController do
     json(conn, %{game_id: game_id})
   end
 
-  def check_position(conn, %{"game_id" => game_id}) do
+  def check_position(conn, %{"game_id" => game_id, "name" => name}) do
     {:ok, position, _} = Plug.Conn.read_body(conn)
     parsed_position = Poison.Parser.parse!(position)
-    result = Loca.GameManager.check_position(game_id, hd(parsed_position))
+    result = Loca.GameManager.check_position(game_id, name, hd(parsed_position))
     IO.inspect(result)
     json(conn, %{status: result})
   end
 
-  def join(conn, %{"game_id" => game_id}) do
-    Loca.GameManager.join_game(game_id, "Ziom", %{"lat" => 10, "lng" => 10})
-    render(conn, "game.html", game_id: game_id)
+  def pre_join(conn, %{"game_id" => game_id}) do
+    render(conn, "join_game.html", game_id: game_id)
+  end
+
+  def join(conn, %{"game_id" => game_id, "name" => name}) do
+    Loca.GameManager.join_game(game_id, name, %{"lat" => 10, "lng" => 10})
+    render(conn, "game.html", game_id: game_id, name: name)
   end
 end
