@@ -17,8 +17,8 @@ defmodule LocaWeb.GameChannel do
 
   # It is also common to receive messages from the client and
   # broadcast to everyone in the current topic (game:lobby).
-  def handle_in("shout", payload, socket) do
-    broadcast socket, "shout", payload
+  def handle_in("moved", payload, socket) do
+    broadcast socket, "player_moved", payload
     {:noreply, socket}
   end
 
