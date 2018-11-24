@@ -21,9 +21,7 @@ defmodule Loca.GameManager do
 
   def get_player_location(game_id), do: GenServer.call({:global, game_id}, :get_player_location)
 
-  def handle_call(:check_state, _from, state) do
-    {:reply, state, state}
-  end
+  def handle_call(:check_state, _from, state), do: {:reply, state, state}
 
   def handle_call({:join_game, name, position = %{"lng" => _lng, "lat" => _lat}}, _from, state) do
     new_player =
