@@ -36,4 +36,4 @@ You can read more about code in specific projects README's
 
 _Loca_ has all the backend code
 
-[`LocaWeb`](/apps/loca_web) has all the frontend code.
+[`LocaWeb`](https://github.com/spawnfest/NEPI_2018/tree/master/loca_umbrella/apps/loca_web) has all the frontend code.
