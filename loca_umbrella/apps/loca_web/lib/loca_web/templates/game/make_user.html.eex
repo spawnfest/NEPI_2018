@@ -8,19 +8,20 @@
       <div class="modal-body">
         <p>
           <div class="form-group">
-          <input id="name-input" value=""></input>
+            <input class="form-control" id="name-input" value="" placeholder="User name" required></input>
           </div>
-          <button type="button" class="btn btn-info" id="join-game">JOIN</button>
+          <button type="submit" class="btn btn-info" id="join-game">JOIN</button>
         </p>
       </div>
     </div>
   </div>
 </div>
 <script>
-  $('#invitation-modal').modal('show');
+  $('#invitation-modal').modal({backdrop: 'static', keyboard: false});
   var joinButton = document.getElementById('join-game');
   var input = document.getElementById('name-input');
   joinButton.addEventListener('click', (e) => {
-    window.location.href = window.location.href + '/' + input.value
+    if (input.value && input.value.length > 0)
+      window.location.href = window.location.href + '/' + input.value
   });
 </script>
