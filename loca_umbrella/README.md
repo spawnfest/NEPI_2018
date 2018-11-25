@@ -24,10 +24,12 @@ Player is then redirected to color-based page.
 1. Green means player is on right track to next marker
 2. Red means player is not on right track to next marker
 3. Grey means player is not moving
-4. Yellow means player managed to walk to marker
+4. Yellow means player managed to walk to marker (note, you need to be in ~10m radius to capture the marker)
 5. Pink means player has achieved final marker and won
 
 All markers are shared between players, but only _current_ marker can be achieved by any player. First player to get to last one wins.
+
+Host player will see dots with labels representing players. Label is name that player chose when joining game.
 
 ## Code itself
 You can read more about code in specific projects README's
