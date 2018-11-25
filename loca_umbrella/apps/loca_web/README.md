@@ -38,11 +38,11 @@ GameController:
 
 ### Player perspective
   Player interface is dead simple, it just show colors
-    ![Gray](../../gray.png "Gray")
-    - when there is no movement
-    ![Green](../../green.png "Green")
-    - when player  moving in the right direction
-    ![Red](../../red.png "Red")
-    - when player is moving in the wrong direction
-    ![Pink](../../pink.png "Pink")
-    - when player won
+  - when there is no movement:
+  ![Gray](../../gray.png)
+  - when player  moving in the right direction
+  ![Green](../../green.png "Green")
+  - when player is moving in the wrong direction
+  ![Red](../../red.png "Red")
+  - when player won
+  ![Pink](../../pink.png "Pink")
