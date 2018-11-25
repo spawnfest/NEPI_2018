@@ -9,7 +9,7 @@
 
   renderStatus('no_movement');
 
-  setInterval(() => {
+  var lopp = setInterval(() => {
     checkPosition();
   }, 1000);
 
@@ -44,11 +44,12 @@
         break;
       case 'on_point':
         document.body.style.backgroundColor = 'yellow';
-        broadcastState(state);
+        broadcastState(status);
         break;
       case 'winner':
         document.body.style.backgroundColor = 'pink';
-        broadcastState(state);
+        broadcastState(status);
+        clearInterval(lopp);
         break;
       default:
     }

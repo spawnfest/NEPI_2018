@@ -124,8 +124,19 @@
             window.showMessage('User ' + data.user_name + ' on point', 'alert-info');
             break;
           case 'winner':
-            window.showMessage('User ' + data.user_name + ' won', 'alert-info');
+            window.showMessage('User ' + data.user_name + ' won', 'alert-warning');
             startButton.removeAttribute('disabled');
+            markers.forEach(marker => {
+              marker.setMap(null);
+            });
+            markers = [];
+            playerLocations.forEach(player => {
+              console.log(player);
+              player.marker.setMap(null);
+            });
+            playerLocations = [];
+            startButton.setAttribute('disabled', true);
+            startButton.innerHTML = "Choose markers";
             break;
           default:
             break;

@@ -66,7 +66,7 @@
 
           setTimeout(function() {
               messageBox.style.display = 'none';
-          }, 10000);
+          }, 3000);
         }
 
       </script>
