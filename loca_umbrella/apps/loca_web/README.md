@@ -9,6 +9,8 @@ To start your server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
+You can also visit [`https://blooming-dusk-12946.herokuapp.com`](https://blooming-dusk-12946.herokuapp.com)
+
 ## Architecture
 
 
