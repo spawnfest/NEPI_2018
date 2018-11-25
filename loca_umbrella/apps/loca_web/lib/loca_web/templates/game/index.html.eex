@@ -91,6 +91,7 @@
             color: randomColor(),
             marker: new google.maps.Marker({
               map: map,
+              label: data.name,
               position: {
                 lng: data.lng,
                 lat: data.lat
@@ -110,6 +111,7 @@
 
        playerLocations[data.name].marker = new google.maps.Marker({
           map: map,
+          label: data.name,
           position: {
             lng: data.lng,
             lat: data.lat
@@ -132,15 +134,14 @@
           case 'on_point':
             window.showMessage('User ' + data.user_name + ' on point', 'alert-info');
             break;
-
           case 'winner':
             window.showMessage('User ' + data.user_name + ' won', 'alert-info');
             break;
-
           default:
             break;
           }
       });
+
       channel.on("player_joined", data => {
         window.showMessage('User ' + data.user_name + ' joined', 'alert-info');
       });
