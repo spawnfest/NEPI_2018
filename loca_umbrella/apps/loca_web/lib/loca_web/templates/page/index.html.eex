@@ -23,34 +23,6 @@
   var startButton = document.getElementById('start-game');
   var playerLocations = [];
 
-  let channel = socket.channel("game:lobby", {})
-  channel.join();
-
-  channel.on("player_moved", data => {
-    if (playerLocations[data.name]) {
-        playerLocations[data.name].setMap(null);
-    } else {
-      data.color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
-    }
-    playerLocations[data.name] = new google.maps.Marker({
-      map: map,
-      position: {
-        lng: data.lng,
-        lat: data.lat
-      },
-      icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          fillColor: data.color,
-          fillOpacity: 0.6,
-          strokeColor: data.color,
-          strokeOpacity: 0.9,
-          strokeWeight: 1,
-          scale: 7
-      }
-    });
-  });
-
-
   function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 54.413, lng: 18.555},
@@ -107,6 +79,33 @@
       invitationLink.href = window.location.href + 'join/' + data.game_id;
       invitationLink.innerHTML = window.location.href + 'join/' + data.game_id;
       $('#invitation-modal').modal('show');
+
+      let channel = socket.channel("game:" + data.game_id, {})
+      channel.join();
+
+      channel.on("player_moved", data => {
+        if (playerLocations[data.name]) {
+            playerLocations[data.name].setMap(null);
+        } else {
+          data.color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+        }
+        playerLocations[data.name] = new google.maps.Marker({
+          map: map,
+          position: {
+            lng: data.lng,
+            lat: data.lat
+          },
+          icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              fillColor: data.color,
+              fillOpacity: 0.6,
+              strokeColor: data.color,
+              strokeOpacity: 0.9,
+              strokeWeight: 1,
+              scale: 7
+          }
+        });
+      });
     });
   });
 </script>

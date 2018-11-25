@@ -2,7 +2,7 @@ defmodule LocaWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel "game:lobby", LocaWeb.GameChannel
+  channel "game:*", LocaWeb.GameChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket, check_origin: false
