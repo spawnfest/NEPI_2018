@@ -75,6 +75,7 @@
     })
     .then(response => response.json())
     .then(data => {
+      startButton.setAttribute('disabled', true);
       let invitationLink = document.getElementById("invitation");
       invitationLink.href = window.location.href + 'join/' + data.game_id;
       invitationLink.innerHTML = window.location.href + 'join/' + data.game_id;
@@ -124,6 +125,7 @@
             break;
           case 'winner':
             window.showMessage('User ' + data.user_name + ' won', 'alert-info');
+            startButton.removeAttribute('disabled');
             break;
           default:
             break;
