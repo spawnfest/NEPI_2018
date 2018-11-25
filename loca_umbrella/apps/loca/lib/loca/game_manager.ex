@@ -64,6 +64,7 @@ defmodule Loca.GameManager do
         (players -- [player_to_change]) ++ [%{player_to_change | "position" => position}]
     end
 
+  defp calculate_distance([], _position), do: 0
   defp calculate_distance([%{"lng" => marker_lng, "lat" => marker_lat} | _rest], %{
          "lat" => player_lat,
          "lng" => player_lng
