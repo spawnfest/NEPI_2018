@@ -19,7 +19,8 @@ defmodule Loca.GameManager do
 
   def get_state(game_id), do: GenServer.call({:global, game_id}, :check_state)
 
-  def get_player_location(game_id, name), do: GenServer.call({:global, game_id}, {:get_player_location, name})
+  def get_player_location(game_id, name),
+    do: GenServer.call({:global, game_id}, {:get_player_location, name})
 
   def handle_call(:check_state, _from, state), do: {:reply, state, state}
 
@@ -29,9 +30,14 @@ defmodule Loca.GameManager do
     {:reply, :ok, %{state | players: state.players ++ [new_player]}}
   end
 
-  def handle_call({:get_player_location, name}, _from, state), do: {:reply, find_player(state.players, name)["position"], state}
+  def handle_call({:get_player_location, name}, _from, state),
+    do: {:reply, find_player(state.players, name)["position"], state}
 
-  def handle_call({:check_position, name, position = %{"lng" => _lng, "lat" => _lat}}, _from, state) do
+  def handle_call(
+        {:check_position, name, position = %{"lng" => _lng, "lat" => _lat}},
+        _from,
+        state
+      ) do
     old_distance = calculate_distance(state.markers, find_player(state.players, name)["position"])
     new_distance = calculate_distance(state.markers, position)
 
@@ -43,26 +49,41 @@ defmodule Loca.GameManager do
         old_distance - new_distance == 0 -> :no_movement
       end
 
-    new_state = update_state(state, position, name, result)
+    new_state =
+      cond do
+        length(state.markers) > 0 -> update_state(state, position, name, result)
+        true -> state
+      end
 
     cond do
-      length(new_state.markers) == 0 -> {:reply, %{"result" => %{"action" => :winner, "player" => name}, "distance" => new_distance}, new_state}
-      true -> {:reply, %{"result" => %{"action" => result, "player" => name}, "distance" => new_distance}, new_state}
+      length(new_state.markers) == 0 ->
+        {:reply,
+         %{"result" => %{"action" => :winner, "player" => name}, "distance" => new_distance},
+         new_state}
+
+      true ->
+        {:reply,
+         %{"result" => %{"action" => result, "player" => name}, "distance" => new_distance},
+         new_state}
     end
   end
 
   defp update_state(state, position, name, :on_point),
-    do: %{state | markers: tl(state.markers), players: update_players_list(state.players, name, position)}
+    do: %{
+      state
+      | markers: tl(state.markers),
+        players: update_players_list(state.players, name, position)
+    }
 
   defp update_state(state, _position, _name, :no_movement), do: state
 
   defp update_state(state, position, name, _result),
     do: %{state | players: update_players_list(state.players, name, position)}
 
-    defp update_players_list(players, name, position) do
-        player_to_change = find_player(players, name)
-        (players -- [player_to_change]) ++ [%{player_to_change | "position" => position}]
-    end
+  defp update_players_list(players, name, position) do
+    player_to_change = find_player(players, name)
+    (players -- [player_to_change]) ++ [%{player_to_change | "position" => position}]
+  end
 
   defp calculate_distance([], _position), do: 0
 
@@ -76,20 +97,23 @@ defmodule Loca.GameManager do
 
   defp square(x), do: x * x
 
-
   defp distance_in_meters(lat1, lon1, lat2, lon2) do
-      earthRadiusMeters = 6_371_000
+    earthRadiusMeters = 6_371_000
 
-      dLat = degreesToRadians(lat2-lat1)
-      dLon = degreesToRadians(lon2-lon1)
+    dLat = degreesToRadians(lat2 - lat1)
+    dLon = degreesToRadians(lon2 - lon1)
 
-      a = square(:math.sin(dLat/2)) + (square(:math.sin(dLon/2)) * :math.cos(degreesToRadians(lat1)) * :math.cos(degreesToRadians(lat2)))
+    a =
+      square(:math.sin(dLat / 2)) +
+        square(:math.sin(dLon / 2)) * :math.cos(degreesToRadians(lat1)) *
+          :math.cos(degreesToRadians(lat2))
 
-      c = 2 * :math.atan2(:math.sqrt(a), :math.sqrt(1-a))
-      earthRadiusMeters * c
+    c = 2 * :math.atan2(:math.sqrt(a), :math.sqrt(1 - a))
+    earthRadiusMeters * c
   end
 
-  defp degreesToRadians(degrees), do: degrees * :math.pi / 180
+  defp degreesToRadians(degrees), do: degrees * :math.pi() / 180
 
-  def find_player(players, name), do: Enum.find(players, fn(player) -> match?(%{"name" => name, "position" => _}, player) end)
+  def find_player(players, name),
+    do: Enum.find(players, fn player -> match?(%{"name" => name, "position" => _}, player) end)
 end
