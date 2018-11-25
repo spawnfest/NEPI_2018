@@ -28,4 +28,8 @@ GameController:
   - make_user & join - creates user and joins to started game
 
 
+## How it works
 
+![Start game](../../start_game.gif "Start game")
+
+![Game](../../game.gif "Game")
