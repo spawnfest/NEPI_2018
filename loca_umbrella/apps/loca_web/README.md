@@ -30,6 +30,8 @@ GameController:
 
 ## How it works
 
+### Game start
 ![Start game](../../start_game.gif "Start game")
 
+### Game
 ![Game](../../game.gif "Game")
