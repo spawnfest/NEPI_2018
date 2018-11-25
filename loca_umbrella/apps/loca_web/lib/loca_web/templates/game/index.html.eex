@@ -113,6 +113,7 @@
               }
             })
           };
+          playerLocations[data.name].marker.setMap(map);
         }
       });
 
