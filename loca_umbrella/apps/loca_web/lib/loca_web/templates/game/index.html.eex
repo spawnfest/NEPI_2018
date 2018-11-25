@@ -135,8 +135,6 @@
               player.marker.setMap(null);
             });
             playerLocations = [];
-            startButton.setAttribute('disabled', true);
-            startButton.innerHTML = "Choose markers";
             break;
           default:
             break;
