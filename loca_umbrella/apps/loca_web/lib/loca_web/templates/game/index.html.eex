@@ -106,7 +106,7 @@
           }
         });
       });
-      
+
       channel.on("player_state_changed", data => {
         switch (data.state) {
           case 'on_point':
@@ -120,6 +120,9 @@
           default:
             break;
           }
+      });
+      channel.on("player_joined", data => {
+        window.showMessage('User ' + data.user_name + ' joined', 'alert-info');
       });
     });
   });
