@@ -106,6 +106,21 @@
           }
         });
       });
+      
+      channel.on("player_state_changed", data => {
+        switch (data.state) {
+          case 'on_point':
+            window.showMessage('User ' + data.user_name + ' on point', 'alert-info');
+            break;
+
+          case 'winner':
+            window.showMessage('User ' + data.user_name + ' won', 'alert-info');
+            break;
+
+          default:
+            break;
+          }
+      });
     });
   });
 </script>

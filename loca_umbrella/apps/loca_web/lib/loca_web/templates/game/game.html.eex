@@ -44,9 +44,11 @@
         break;
       case 'on_point':
         document.body.style.backgroundColor = 'yellow';
+        broadcastState(state);
         break;
       case 'winner':
         document.body.style.backgroundColor = 'pink';
+        broadcastState(state);
         break;
       default:
     }
