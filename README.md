@@ -31,12 +31,25 @@ All markers are shared between players, but only _current_ marker can be achieve
 
 Host player will see dots with labels representing players. Label is name that player chose when joining game.
 
-## Code itself
-You can read more about code in specific projects README's
+# Projects
 
-_Loca_ has all the backend code
+## Loca
 
-# Loca Web
+To play around with backend:
+  1. Go to loca_umbrella folder `cd loca_umbrella`
+  2. Install dependencies with `mix deps.get`
+  3. Start `iex` with command `iex -S mix`.
+  4. Now you can call `Loca.GameManager` functions (described below)
+  5. There's `get_state/1` function that takes game_id and returns whole state. It was used for debug reasons, you can use it while playing around in console.
+
+Backend is dead simple - it's single gen_server with few methods exposed:
+  * start_game/1 - it accepts list of coordinates of markers. Returns game_id. Everytime it's called new gen_server is created to handle instance of game. Game_id is used for all other methods.
+  * join_game/3 - Allows to join _user_ to game. It specifies _name_ of user and their _starting location_
+  * check_position/3 - Checks position of _user_. This function will return information that will be presented in color code (see _Loca Web_ for more information)
+
+All other methods are simply doing their part - like calculating distance to decide if player is going the right way.
+
+## Loca Web
 
 To start your server:
   * Go to loca_umbrella folder `cd loca_umbrella`
@@ -87,6 +100,21 @@ GameController:
 
   ![Red](./loca_umbrella/red.png "Red")
 
+  - when player got marker
+
+  ![Yellow](./loca_umbrella/yellow.png "Yellow")
+
   - when player won
 
   ![Pink](./loca_umbrella/pink.png "Pink")
+
+
+## Ideas for future developement?
+
+  - Make distance calculation less prone to GPS inaccuracy
+  - Add `you lost` information for other players
+  - Change (or add new) marker behaviour; every player gets the same markers but with random order.
+  - Add tips on where (N/NE/E/SE/S/SW/W/NW) player should go to be closer. This could be visible all the time, or after longer period of `further`/`no_movement` messages
+  - Add points for every marker got and decide who won based on that.
+  - Do better ending screen
+  - Add distance_walked by player to show some stats after game was finished
