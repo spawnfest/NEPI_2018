@@ -1,4 +1,4 @@
-defmodule LocaWeb.PageController do
+defmodule LocaWeb.GameController do
   use LocaWeb, :controller
 
   def index(conn, _params) do
@@ -19,12 +19,11 @@ defmodule LocaWeb.PageController do
     {:ok, position, _} = Plug.Conn.read_body(conn)
     parsed_position = Poison.Parser.parse!(position)
     result = Loca.GameManager.check_position(game_id, name, hd(parsed_position))
-    IO.inspect(result)
     json(conn, %{status: result})
   end
 
-  def pre_join(conn, %{"game_id" => game_id}) do
-    render(conn, "join_game.html", game_id: game_id)
+  def make_user(conn, %{"game_id" => game_id}) do
+    render(conn, "make_user.html", game_id: game_id)
   end
 
   def join(conn, %{"game_id" => game_id, "name" => name}) do

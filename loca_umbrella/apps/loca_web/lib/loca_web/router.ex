@@ -15,11 +15,11 @@ defmodule LocaWeb.Router do
   scope "/", LocaWeb do
     pipe_through :browser # Use the default browser stack
 
-    get "/", PageController, :index
-    get "/join/:game_id", PageController, :pre_join
-    get "/join/:game_id/:name", PageController, :join
-    post "/check_position/:game_id/:name", PageController, :check_position
-    post "/start_game", PageController, :start_game
+    get "/", GameController, :index
+    get "/join/:game_id", GameController, :make_user
+    get "/join/:game_id/:name", GameController, :join
+    post "/check_position/:game_id/:name", GameController, :check_position
+    post "/start_game", GameController, :start_game
   end
 
   # Other scopes may use custom stacks.

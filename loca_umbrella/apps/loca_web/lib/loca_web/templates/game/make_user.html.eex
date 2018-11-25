@@ -1,0 +1,26 @@
+
+<div class="modal" tabindex="-1" role="dialog" id="invitation-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Please provide name.</h5>
+      </div>
+      <div class="modal-body">
+        <p>
+          <div class="form-group">
+          <input id="name-input" value=""></input>
+          </div>
+          <button type="button" class="btn btn-info" id="join-game">JOIN</button>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $('#invitation-modal').modal('show');
+  var joinButton = document.getElementById('join-game');
+  var input = document.getElementById('name-input');
+  joinButton.addEventListener('click', (e) => {
+    window.location.href = window.location.href + '/' + input.value
+  });
+</script>
