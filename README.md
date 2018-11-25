@@ -100,7 +100,7 @@ GameController:
 
   ![Red](./loca_umbrella/red.png "Red")
 
-  - when player got marker
+  - when player gets the marker
 
   ![Yellow](./loca_umbrella/yellow.png "Yellow")
 
