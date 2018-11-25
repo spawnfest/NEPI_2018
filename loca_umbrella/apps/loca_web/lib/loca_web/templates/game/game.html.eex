@@ -55,4 +55,8 @@
     channel.push("moved", position, 10000);
   }
 
+  function broadcastState(state) {
+    channel.push("state", {state: state, user_name: user_name}, 10000);
+  }
+
 </script>

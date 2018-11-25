@@ -9,17 +9,15 @@ defmodule LocaWeb.GameChannel do
     end
   end
 
-  # Channels can be used in a request/response fashion
-  # by sending replies to requests from the client
-  def handle_in("ping", payload, socket) do
-    {:reply, {:ok, payload}, socket}
-  end
-
-  # It is also common to receive messages from the client and
-  # broadcast to everyone in the current topic (game:lobby).
   def handle_in("moved", payload, socket) do
     IO.inspect payload
     broadcast socket, "player_moved", payload
+    {:noreply, socket}
+  end
+
+  def handle_in("state", payload, socket) do
+    IO.inspect payload
+    broadcast socket, "player_state_changed", payload
     {:noreply, socket}
   end
 
