@@ -85,11 +85,30 @@
 
       channel.on("player_moved", data => {
         if (playerLocations[data.name]) {
-            playerLocations[data.name].setMap(null);
+            playerLocations[data.name].marker.setMap(null);
         } else {
-          data.color = randomColor();
+          playerLocations[data.name] = {
+            color: randomColor(),
+            marker: new google.maps.Marker({
+              map: map,
+              position: {
+                lng: data.lng,
+                lat: data.lat
+              },
+              icon: {
+                  path: google.maps.SymbolPath.CIRCLE,
+                  fillColor: data.color,
+                  fillOpacity: 0.6,
+                  strokeColor: data.color,
+                  strokeOpacity: 0.9,
+                  strokeWeight: 1,
+                  scale: 7
+              }
+            })
+          };
         }
-        playerLocations[data.name] = new google.maps.Marker({
+
+       playerLocations[data.name].marker = new google.maps.Marker({
           map: map,
           position: {
             lng: data.lng,
@@ -97,14 +116,15 @@
           },
           icon: {
               path: google.maps.SymbolPath.CIRCLE,
-              fillColor: data.color,
+              fillColor: playerLocations[data.name].color,
               fillOpacity: 0.6,
-              strokeColor: data.color,
+              strokeColor: playerLocations[data.name].color,
               strokeOpacity: 0.9,
               strokeWeight: 1,
               scale: 7
           }
         });
+        
       });
 
       channel.on("player_state_changed", data => {
