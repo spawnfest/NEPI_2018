@@ -14,7 +14,6 @@
 
   function checkPosition() {
     navigator.geolocation.getCurrentPosition(function(position) {
-      alert(position.coords.latitude);
       broadcastPosition({lat: position.coords.latitude, lng: position.coords.longitude, name: user_name});
       fetch('/check_position/' + game_id + '/' + user_name, {
         method: 'POST',
@@ -32,7 +31,6 @@
   }
 
   function renderStatus(status) {
-    //messageBox.innerHTML = status;
     switch (status) {
       case 'further':
         document.body.style.backgroundColor = 'red';
