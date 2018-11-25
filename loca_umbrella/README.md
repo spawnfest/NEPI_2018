@@ -36,4 +36,4 @@ You can read more about code in specific projects README's
 
 _Loca_ has all the backend code
 
-_LocaWeb_ has all the frontend code
+[`_LocaWeb_`](/apps/loca_web/README.MD) has all the frontend code.
