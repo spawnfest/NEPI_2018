@@ -87,7 +87,7 @@
         if (playerLocations[data.name]) {
             playerLocations[data.name].setMap(null);
         } else {
-          data.color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+          data.color = randomColor();
         }
         playerLocations[data.name] = new google.maps.Marker({
           map: map,
@@ -126,4 +126,12 @@
       });
     });
   });
+
+  function randomColor() {
+    var x = Math.floor(Math.random() * 256);
+    var y = Math.floor(Math.random() * 256);
+    var z = Math.floor(Math.random() * 256);
+    var color = "rgb(" + x + "," + y + "," + z + ")";
+    return color;
+  }
 </script>
