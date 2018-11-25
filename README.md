@@ -4,15 +4,7 @@
 
 You can find app deployed [here](http://blooming-dusk-12946.herokuapp.com/)
 
-You can also run it locally.
-
-Try
-
-`mix deps.get`
-
-`mix phx.server`
-
-In loca-umbrella directory
+You can also run it locally (check _LocaWeb_ part of this readme for instructions)
 
 ## HOW TO PLAY
 
