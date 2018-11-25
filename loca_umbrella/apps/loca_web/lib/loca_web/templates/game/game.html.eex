@@ -5,6 +5,7 @@
 
   let channel = socket.channel("game:" + game_id, {});
   channel.join();
+  broadcastJoin();
 
   renderStatus('no_movement');
 
@@ -57,6 +58,10 @@
 
   function broadcastState(state) {
     channel.push("state", {state: state, user_name: user_name}, 10000);
+  }
+
+  function broadcastJoin() {
+    channel.push("join", {user_name: user_name}, 10000);
   }
 
 </script>

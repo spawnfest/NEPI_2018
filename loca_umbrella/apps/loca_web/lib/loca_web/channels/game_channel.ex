@@ -10,14 +10,17 @@ defmodule LocaWeb.GameChannel do
   end
 
   def handle_in("moved", payload, socket) do
-    IO.inspect payload
     broadcast socket, "player_moved", payload
     {:noreply, socket}
   end
 
   def handle_in("state", payload, socket) do
-    IO.inspect payload
     broadcast socket, "player_state_changed", payload
+    {:noreply, socket}
+  end
+
+  def handle_in("join", payload, socket) do
+    broadcast socket, "player_joined", payload
     {:noreply, socket}
   end
 
