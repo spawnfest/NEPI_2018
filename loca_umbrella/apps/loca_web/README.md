@@ -19,7 +19,7 @@ You can also visit [`https://blooming-dusk-12946.herokuapp.com`](https://bloomin
 
 ## Basic components
 
-GameChannel: 
+GameChannel:
   Communication between game host, players and server - used to send messages with game status and player localization.
 
 GameController:
@@ -35,3 +35,14 @@ GameController:
 
 ### Game
 ![Game](../../game.gif "Game")
+
+### Player perspective
+  Player interface is dead simple, it just show colors
+    ![Gray](../../gray.png "Gray")
+    - when there is no movement
+    ![Green](../../green.png "Green")
+    - when player  moving in the right direction
+    ![Red](../../red.png "Red")
+    - when player is moving in the wrong direction
+    ![Pink](../../pink.png "Pink")
+    - when player won
