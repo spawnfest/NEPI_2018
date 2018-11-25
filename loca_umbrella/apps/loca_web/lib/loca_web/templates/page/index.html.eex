@@ -1,100 +1,112 @@
-  <div id="map"></div>
-  <button id="start-game" style="position:fixed; top:10px; left: 50%" type="button" class="start-button btn btn-primary" disabled>Choose markers</button>
+<div id="map"></div>
+<button id="start-game" style="position:fixed; top:10px; left: 50%" type="button" class="start-button btn btn-primary" disabled>Choose markers</button>
 
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUhtGqgaU9lmQtmGUN9O2fRClnSO0pe7s&callback=initMap" async defer></script>
-  <script>
-    var markers = [];
-    var map;
-    var startButton = document.getElementById('start-game');
-    var playerLocations = [];
+<div class="modal" tabindex="-1" role="dialog" id="invitation-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Share game invitation with friends</h5>
+      </div>
+      <div class="modal-body">
+        <p><a id="invitation" href="" target="_blank"/></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUhtGqgaU9lmQtmGUN9O2fRClnSO0pe7s&callback=initMap" async defer></script>
+<script>
+  var markers = [];
+  var map;
+  var startButton = document.getElementById('start-game');
+  var playerLocations = [];
 
-    let channel = socket.channel("game:lobby", {})
-    channel.join()
-      .receive("ok", resp => { console.log("Joined successfully", resp) })
-      .receive("error", resp => { console.log("Unable to join", resp) });
+  let channel = socket.channel("game:lobby", {})
+  channel.join();
 
-    channel.on("player_moved", data => {
+  channel.on("player_moved", data => {
+    if (playerLocations[data.name]) {
+        playerLocations[data.name].setMap(null);
+    } else {
+      data.color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+    }
+    playerLocations[data.name] = new google.maps.Marker({
+      map: map,
+      position: {
+        lng: data.lng,
+        lat: data.lat
+      },
+      icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          fillColor: data.color,
+          fillOpacity: 0.6,
+          strokeColor: data.color,
+          strokeOpacity: 0.9,
+          strokeWeight: 1,
+          scale: 7
+      }
+    });
+  });
 
-      if (playerLocations[data.name]) {
-          playerLocations[data.name].setMap(null);
-      } else {
-        data.color = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
-      }
-      playerLocations[data.name] = new google.maps.Marker({
-        map: map,
-        position: {
-          lng: data.lng,
-          lat: data.lat
-        },
-        icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            fillColor: data.color,
-            fillOpacity: 0.6,
-            strokeColor: data.color,
-            strokeOpacity: 0.9,
-            strokeWeight: 1,
-            scale: 7
-        }
-      });
-      //map.panTo(playerLocations[data.name]);
+
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 54.413, lng: 18.555},
+      zoom: 8
     });
 
-
-    function initMap() {
-      map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 54.413, lng: 18.555},
-        zoom: 8
-      });
-
-      map.addListener('click', (e) => {
-        placeMarker(e.latLng, map);
-      });
+    map.addListener('click', (e) => {
+      placeMarker(e.latLng, map);
+    });
+  }
+  var current;
+  function placeMarker(position, map) {
+    if (markers.length == 0) {
+      startButton.removeAttribute('disabled');
+      startButton.innerHTML = "Start game";
     }
-    var current;
-    function placeMarker(position, map) {
+    var marker = new google.maps.Marker({
+      position: position,
+      map: map
+    });
+
+    // remove marker
+    marker.addListener('click', () => {
+      marker.setMap(null);
+      markers = markers.filter(m => {
+        return m !== marker;
+      });
+
       if (markers.length == 0) {
-        startButton.removeAttribute('disabled');
-        startButton.innerHTML = "Start game";
+        startButton.setAttribute('disabled', true);
+        startButton.innerHTML = "Choose markers";
       }
-      var marker = new google.maps.Marker({
-        position: position,
-        map: map
-      });
+    });
+    map.panTo(position);
 
-      // remove marker
-      marker.addListener('click', () => {
-        marker.setMap(null);
-        markers = markers.filter(m => {
-          return m !== marker;
-        });
+    markers.push(marker);
+  }
 
-        if (markers.length == 0) {
-          startButton.setAttribute('disabled', true);
-          startButton.innerHTML = "Choose markers";
-        }
-      });
-      map.panTo(position);
-
-      markers.push(marker);
-    }
-
-    startButton.addEventListener('click', (e) => {
-      var markerObjects = markers.map(m => {
-        return {
-          lat: m.position.lat(),
-          lng: m.position.lng(),
-        }
-      });
-
-      fetch('/start_game', {
-        method: 'POST',
-        body: JSON.stringify(markerObjects)
-      })
-      .then(response => response.json())
-      .then(data => {
-        alert(window.location.href + 'join/' + data.game_id);
-      });
+  startButton.addEventListener('click', (e) => {
+    var markerObjects = markers.map(m => {
+      return {
+        lat: m.position.lat(),
+        lng: m.position.lng(),
+      }
     });
 
-
-  </script>
+    fetch('/start_game', {
+      method: 'POST',
+      body: JSON.stringify(markerObjects)
+    })
+    .then(response => response.json())
+    .then(data => {
+      let invitationLink = document.getElementById("invitation");
+      invitationLink.href = window.location.href + 'join/' + data.game_id;
+      invitationLink.innerHTML = window.location.href + 'join/' + data.game_id;
+      $('#invitation-modal').modal('show');
+    });
+  });
+</script>
