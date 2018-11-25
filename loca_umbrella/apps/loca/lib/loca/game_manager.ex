@@ -65,11 +65,14 @@ defmodule Loca.GameManager do
     end
 
   defp calculate_distance([], _position), do: 0
+
   defp calculate_distance([%{"lng" => marker_lng, "lat" => marker_lat} | _rest], %{
          "lat" => player_lat,
          "lng" => player_lng
        }),
        do: distance_in_meters(marker_lat, marker_lng, player_lat, player_lng)
+
+  defp calculate_distance(_, _), do: 0
 
   defp square(x), do: x * x
 
