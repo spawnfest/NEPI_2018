@@ -31,6 +31,14 @@
         top: 5%,
         left: 5%,
       }
+      #message {
+        position: fixed;
+        bottom: 0;
+        width: 80%;
+        margin-left: 10%;
+        margin-right: 10%;
+      }
+
     </style>
 
   </head>
@@ -38,8 +46,30 @@
   <body>
 
       <%= render @view_module, @view_template, assigns %>
-      <div class="container">
-      </div> <!-- /container -->
+
+      <div id="message" class="alert alert-danger" role="alert" style="display:none">
+        <span id="message-text"></span>
+      </div>
+
+      <script>
+        window.showMessage = function(message, alertClass) {
+          alertClass = alertClass || 'alert-danger';
+
+          let messageBox = document.getElementById('message');
+          let messageText = document.getElementById('message-text');
+
+          messageBox.classList.remove('alert-danger');
+          messageBox.classList.add(alertClass);
+
+          messageText.innerHTML = message;
+          messageBox.style.display = 'block';
+
+          setTimeout(function() {
+              messageBox.style.display = 'none';
+          }, 3000);
+        }
+
+      </script>
 
   </body>
 </html>
