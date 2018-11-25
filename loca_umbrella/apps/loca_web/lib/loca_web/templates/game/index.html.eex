@@ -86,9 +86,15 @@
       channel.on("player_moved", data => {
         if (playerLocations[data.name]) {
             playerLocations[data.name].marker.setMap(null);
+            playerLocations[data.name].marker.setPosition({
+              lng: data.lng,
+              lat: data.lat
+            });
+            playerLocations[data.name].marker.setMap(map);
         } else {
+          var color = randomColor();
           playerLocations[data.name] = {
-            color: randomColor(),
+            color: color,
             marker: new google.maps.Marker({
               map: map,
               label: data.name,
@@ -98,9 +104,9 @@
               },
               icon: {
                   path: google.maps.SymbolPath.CIRCLE,
-                  fillColor: data.color,
+                  fillColor: color,
                   fillOpacity: 0.6,
-                  strokeColor: data.color,
+                  strokeColor: color,
                   strokeOpacity: 0.9,
                   strokeWeight: 1,
                   scale: 7
@@ -108,11 +114,6 @@
             })
           };
         }
-
-       playerLocations[data.name].marker.setPosition({
-          lng: data.lng,
-          lat: data.lat
-        });
       });
 
       channel.on("player_state_changed", data => {
