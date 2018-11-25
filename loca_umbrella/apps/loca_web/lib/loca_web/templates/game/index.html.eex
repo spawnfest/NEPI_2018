@@ -91,6 +91,7 @@
             color: randomColor(),
             marker: new google.maps.Marker({
               map: map,
+              label: data.name,
               position: {
                 lng: data.lng,
                 lat: data.lat
@@ -108,23 +109,10 @@
           };
         }
 
-       playerLocations[data.name].marker = new google.maps.Marker({
-          map: map,
-          position: {
-            lng: data.lng,
-            lat: data.lat
-          },
-          icon: {
-              path: google.maps.SymbolPath.CIRCLE,
-              fillColor: playerLocations[data.name].color,
-              fillOpacity: 0.6,
-              strokeColor: playerLocations[data.name].color,
-              strokeOpacity: 0.9,
-              strokeWeight: 1,
-              scale: 7
-          }
+       playerLocations[data.name].marker.setPosition({
+          lng: data.lng,
+          lat: data.lat
         });
-        
       });
 
       channel.on("player_state_changed", data => {
@@ -132,15 +120,14 @@
           case 'on_point':
             window.showMessage('User ' + data.user_name + ' on point', 'alert-info');
             break;
-
           case 'winner':
             window.showMessage('User ' + data.user_name + ' won', 'alert-info');
             break;
-
           default:
             break;
           }
       });
+
       channel.on("player_joined", data => {
         window.showMessage('User ' + data.user_name + ' joined', 'alert-info');
       });
